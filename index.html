@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Treino do XD</title>
+    <style>
+        :root[data-theme="dark"] {
+            --bg: #0f0f0f;
+            --card: #1a1a1a;
+            --card2: #222;
+            --text: #f0f0f0;
+            --muted: #888;
+            --accent: #7c3aed;
+            --accent2: #a78bfa;
+            --done-bg: #14532d22;
+            --done-border: #22c55e44;
+            --done-text: #86efac;
+            --bar-bg: #2a2a2a;
+            --border: #2a2a2a;
+            --btn: #7c3aed;
+            --btn-hover: #6d28d9;
+            --badge: #1e1e2e;
+        }
+
+        :root[data-theme="light"] {
+            --bg: #f5f5f5;
+            --card: #ffffff;
+            --card2: #f0f0f0;
+            --text: #111;
+            --muted: #666;
+            --accent: #7c3aed;
+            --accent2: #6d28d9;
+            --done-bg: #f0fdf4;
+            --done-border: #86efac;
+            --done-text: #15803d;
+            --bar-bg: #e5e7eb;
+            --border: #e5e7eb;
+            --btn: #7c3aed;
+            --btn-hover: #6d28d9;
+            --badge: #ede9fe;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .header-left h1 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .header-left p {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-btn {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text);
+            transition: background 0.2s;
+        }
+
+        .theme-btn:hover {
+            background: var(--border);
+        }
+
+        .global-reset {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: var(--muted);
+            transition: all 0.2s;
+        }
+
+        .global-reset:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            padding: 16px 24px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        nav a {
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+            background: var(--card2);
+            color: var(--muted);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        nav a.done-nav {
+            background: var(--done-bg);
+            border-color: var(--done-border);
+            color: var(--done-text);
+        }
+
+        main {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 24px 16px 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .day-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .day-card.completed {
+            border-color: var(--done-border);
+        }
+
+        .day-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .day-header-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .day-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent2);
+            margin-bottom: 4px;
+        }
+
+        .day-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .day-subtitle {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .day-badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: var(--badge);
+            color: var(--accent2);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .day-badge.done-badge {
+            background: var(--done-bg);
+            color: var(--done-text);
+            border: 1px solid var(--done-border);
+        }
+
+        .progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--bar-bg);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            font-size: 0.72rem;
+            color: var(--muted);
+            min-width: 36px;
+            text-align: right;
+        }
+
+        .muscle-group {
+            padding: 0 24px;
+        }
+
+        .muscle-label {
+            padding: 14px 0 8px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 4px;
+        }
+
+        .exercise-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+
+        .exercise-item:last-child {
+            border-bottom: none;
+        }
+
+        .exercise-item.checked .exercise-name {
+            text-decoration: line-through;
+            color: var(--muted);
+        }
+
+        .exercise-item.checked {
+            background: var(--done-bg);
+            margin: 0 -24px;
+            padding-left: 24px;
+            padding-right: 24px;
+            border-radius: 8px;
+        }
+
+        .exercise-item.checked .exercise-sets {
+            color: var(--done-text);
+        }
+
+        .exercise-emoji {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            width: 28px;
+            text-align: center;
+        }
+
+        .exercise-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .exercise-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.2s, text-decoration 0.2s;
+        }
+
+        .exercise-tip {
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .exercise-sets {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent2);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .custom-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .exercise-item.checked .custom-check {
+            background: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .custom-check svg {
+            display: none;
+            width: 12px;
+            height: 12px;
+        }
+
+        .exercise-item.checked .custom-check svg {
+            display: block;
+        }
+
+        .day-footer {
+            padding: 16px 24px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .conclude-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--btn);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+        }
+
+        .conclude-btn:hover:not(:disabled) {
+            background: var(--btn-hover);
+            transform: translateY(-1px);
+        }
+
+        .conclude-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .conclude-btn.done-btn {
+            background: #15803d;
+            cursor: default;
+        }
+
+        .conclude-btn.done-btn:hover {
+            background: #15803d;
+            transform: none;
+        }
+
+        .undo-btn {
+            display: block;
+            margin: 8px auto 0;
+            background: transparent;
+            border: none;
+            font-size: 0.72rem;
+            color: var(--muted);
+            cursor: pointer;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .undo-btn:hover {
+            color: #ef4444;
+        }
+
+        .rest-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .rest-card .rest-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .rest-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .rest-desc {
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card);
+            color: var(--text);
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (min-width: 600px) {
+            .day-header-top {
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-left">
+            <h1>Treino do XD</h1>
+            <p>Acompanhe sua evolução diária</p>
+        </div>
+        <div class="header-right">
+            <button class="global-reset" onclick="app.resetData()" title="Zerar progresso da semana">Zerar</button>
+            <button class="theme-btn" id="themeBtn" onclick="app.toggleTheme()" title="Trocar Tema">🌙</button>
+        </div>
+    </header>
+
+    <nav id="nav-container">
+        <!-- Renderizado via JS -->
+    </nav>
+
+    <main id="app-content">
+        <!-- Renderizado via JS -->
+    </main>
+
+    <div id="toast" class="toast">Ação concluída!</div>
+
+    <script>
+        // --- DADOS DO TREINO DE EXEMPLO ---
+        // Você pode editar esta parte do arquivo com seu treino real!!
+        const workoutData = [
+            {
+                id: 'day-A',
+                label: 'Treino A',
+                title: 'Peito e Tríceps',
+                rest: false,
+                muscles: [
+                    {
+                        name: 'Peito',
+                        exercises: [
+                            { id: 'ex-a1', emoji: '🏋️‍♂️', name: 'Supino Reto', sets: '4x 8-12', tip: 'Foco na contração' },
+                            { id: 'ex-a2', emoji: '💪', name: 'Supino Inclinado com Halteres', sets: '3x 10-12', tip: 'Desça até alongar bem' },
+                            { id: 'ex-a3', emoji: '🦋', name: 'Crucifixo Máquina/Cabo', sets: '3x 12-15', tip: 'Contraia no pico' }
+                        ]
+                    },
+                    {
+                        name: 'Tríceps',
+                        exercises: [
+                            { id: 'ex-a4', emoji: '⚡', name: 'Tríceps Polia (Corda)', sets: '4x 10-15', tip: 'Movimento controlado' },
+                            { id: 'ex-a5', emoji: '💥', name: 'Tríceps Testa', sets: '3x 10-12', tip: 'Cotovelos fechados' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'day-B',
+                label: 'Treino B',
+                title: 'Costas e Bíceps',
+                rest: false,
+                muscles: [
+                    {
+                        name: 'Costas',
+                        exercises: [
+                            { id: 'ex-b1', emoji: '🦍', name: 'Puxada Aberta (Frente)', sets: '4x 8-12', tip: 'Estufa o peito' },
+                            { id: 'ex-b2', emoji: '🚣', name: 'Remada Curvada/Máquina', sets: '4x 10-12', tip: 'Puxe com os cotovelos' },
+                            { id: 'ex-b3', emoji: '🔻', name: 'Pulldown', sets: '3x 12-15', tip: 'Foco na dorsal' }
+                        ]
+                    },
+                    {
+                        name: 'Bíceps',
+                        exercises: [
+                            { id: 'ex-b4', emoji: '💪', name: 'Rosca Direta (Barra ou Halter)', sets: '4x 8-12', tip: 'Sem roubar com o tronco' },
+                            { id: 'ex-b5', emoji: '🔨', name: 'Rosca Martelo', sets: '3x 10-15', tip: 'Foco no braquial' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'day-C',
+                label: 'Treino C',
+                title: 'Pernas Completas',
+                rest: false,
+                muscles: [
+                    {
+                        name: 'Quadríceps & Glúteo',
+                        exercises: [
+                            { id: 'ex-c1', emoji: '🦵', name: 'Agachamento Livre', sets: '4x 8-10', tip: 'Postura neutra' },
+                            { id: 'ex-c2', emoji: '🏋️‍♀️', name: 'Leg Press 45', sets: '4x 10-12', tip: 'Não estique todo o joelho' },
+                            { id: 'ex-c3', emoji: '🦵', name: 'Cadeira Extensora', sets: '4x 12-15', tip: 'Segure 1s em cima' }
+                        ]
+                    },
+                    {
+                        name: 'Posterior & Panturrilha',
+                        exercises: [
+                            { id: 'ex-c4', emoji: '🔥', name: 'Mesa/Cadeira Flexora', sets: '4x 10-12', tip: 'Movimento completo' },
+                            { id: 'ex-c5', emoji: '👟', name: 'Panturrilha em Pé/Sentado', sets: '4x 15-20', tip: 'Panturrilha queima mesmo!' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'day-D',
+                label: 'Treino D',
+                title: 'Ombros e Abdômen',
+                rest: false,
+                muscles: [
+                    {
+                        name: 'Ombros',
+                        exercises: [
+                            { id: 'ex-d1', emoji: '🤷', name: 'Desenvolvimento Máquina/Halter', sets: '4x 8-12', tip: 'Desça até a orelha' },
+                            { id: 'ex-d2', emoji: '🦅', name: 'Elevação Lateral', sets: '4x 12-15', tip: 'Pense em afastar as mãos' },
+                            { id: 'ex-d3', emoji: '🎯', name: 'Crucifixo Inverso (Máquina ou Polia)', sets: '3x 12-15', tip: 'Controle na volta' }
+                        ]
+                    },
+                    {
+                        name: 'Abdômen',
+                        exercises: [
+                            { id: 'ex-d4', emoji: '🍫', name: 'Supra na Máquina/Chão', sets: '4x 15-20', tip: 'Esmague o abdômen' },
+                            { id: 'ex-d5', emoji: '🔥', name: 'Prancha Isométrica', sets: '3x 45s-1min', tip: 'Corpo reto como uma tábua' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'day-E',
+                label: 'Descanso',
+                title: 'Recuperação',
+                rest: true
+            }
+        ];
+
+        class App {
+            constructor() {
+                this.data = workoutData;
+                this.currentDayIndex = 0;
+                this.progress = this.loadProgress();
+                
+                this.init();
+            }
+
+            init() {
+                this.applySavedTheme();
+                this.renderNav();
+                this.renderCurrentDay();
+            }
+
+            loadProgress() {
+                const saved = localStorage.getItem('treino_xd_progress');
+                if (saved) {
+                    try {
+                        return JSON.parse(saved);
+                    } catch (e) {
+                        return {};
+                    }
+                }
+                return {};
+            }
+
+            saveProgress() {
+                localStorage.setItem('treino_xd_progress', JSON.stringify(this.progress));
+                this.renderNav();
+            }
+
+            toggleTheme() {
+                const html = document.documentElement;
+                const current = html.getAttribute('data-theme');
+                const newTheme = current === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('treino_theme', newTheme);
+                document.getElementById('themeBtn').textContent = newTheme === 'dark' ? '🌙' : '☀️';
+            }
+
+            applySavedTheme() {
+                const savedTheme = localStorage.getItem('treino_theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                document.getElementById('themeBtn').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+            }
+
+            resetData() {
+                if (confirm('Tem certeza que deseja apagar todo o progresso da semana?')) {
+                    this.progress = {};
+                    this.saveProgress();
+                    this.renderCurrentDay();
+                    this.showToast('Progresso zerado!');
+                }
+            }
+
+            showToast(msg) {
+                const toast = document.getElementById('toast');
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2500);
+            }
+
+            setDay(index) {
+                this.currentDayIndex = index;
+                this.renderNav();
+                this.renderCurrentDay();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            toggleExercise(dayId, exerciseId) {
+                if (!this.progress[dayId]) {
+                    this.progress[dayId] = { exercises: {}, completed: false };
+                }
+                
+                // Se o dia já está concluído e tentam desmarcar, avisa (opcional)
+                if (this.progress[dayId].completed) return;
+
+                const currentState = !!this.progress[dayId].exercises[exerciseId];
+                this.progress[dayId].exercises[exerciseId] = !currentState;
+                
+                this.saveProgress();
+                this.renderCurrentDay();
+            }
+
+            markDayCompleted(dayId) {
+                if (!this.progress[dayId]) {
+                    this.progress[dayId] = { exercises: {}, completed: false };
+                }
+                
+                // Marca todos os exercícios daquele dia como feitos
+                const dayData = this.data.find(d => d.id === dayId);
+                if (dayData && !dayData.rest) {
+                    dayData.muscles.forEach(m => {
+                        m.exercises.forEach(ex => {
+                            this.progress[dayId].exercises[ex.id] = true;
+                        });
+                    });
+                }
+                this.progress[dayId].completed = true;
+                
+                this.saveProgress();
+                this.renderCurrentDay();
+                this.showToast('Missão cumprida! 🎉');
+            }
+
+            undoDay(dayId) {
+                if (this.progress[dayId]) {
+                    this.progress[dayId].completed = false;
+                    Object.keys(this.progress[dayId].exercises).forEach(exId => {
+                         this.progress[dayId].exercises[exId] = false;
+                    });
+                    this.saveProgress();
+                    this.renderCurrentDay();
+                    this.showToast('Treino reaberto.');
+                }
+            }
+
+            renderNav() {
+                const container = document.getElementById('nav-container');
+                container.innerHTML = '';
+
+                this.data.forEach((day, index) => {
+                    const isDone = this.progress[day.id]?.completed;
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    let text = day.label;
+                    if (isDone) text += ' ✅';
+
+                    a.textContent = text;
+                    if (isDone) a.classList.add('done-nav');
+                    
+                    if (index === this.currentDayIndex) {
+                        a.style.border = '2px solid var(--accent)';
+                        a.style.padding = '7px 15px'; // compensa a borda
+                    }
+
+                    a.onclick = (e) => {
+                        e.preventDefault();
+                        this.setDay(index);
+                    };
+
+                    container.appendChild(a);
+                });
+            }
+
+            renderCurrentDay() {
+                const container = document.getElementById('app-content');
+                const day = this.data[this.currentDayIndex];
+                const dayProg = this.progress[day.id] || { exercises: {}, completed: false };
+                const isCompleted = dayProg.completed;
+                container.innerHTML = '';
+
+                if (day.rest) {
+                    container.innerHTML = `
+                        <div class="rest-card">
+                            <div class="rest-emoji">🛋️</div>
+                            <div class="rest-title">${day.label}</div>
+                            <div class="rest-desc">Tire um tempo para se recuperar e relaxar. Seus músculos crescem durante o descanso!</div>
+                            ${isCompleted ? 
+                                `<button class="undo-btn" style="margin-top: 20px" onclick="app.undoDay('${day.id}')">Desfazer descanso</button>` : 
+                                `<button class="conclude-btn" style="margin-top: 24px" onclick="app.markDayCompleted('${day.id}')">Aproveitei meu descanso</button>`
+                            }
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Cálculo de progresso
+                let totalEx = 0;
+                let doneEx = 0;
+                day.muscles.forEach(m => {
+                    m.exercises.forEach(ex => {
+                        totalEx++;
+                        if (dayProg.exercises[ex.id]) doneEx++;
+                    });
+                });
+
+                const pct = totalEx === 0 ? 0 : Math.round((doneEx / totalEx) * 100);
+
+                let html = `
+                    <div class="day-card ${isCompleted ? 'completed' : ''}">
+                        <div class="day-header">
+                            <div class="day-header-top">
+                                <div>
+                                    <div class="day-label">${day.label}</div>
+                                    <div class="day-title">${day.title}</div>
+                                    ${isCompleted ? '<div class="day-subtitle">Treino completado com sucesso! 🎉</div>' : ''}
+                                </div>
+                                ${isCompleted ? `<div class="day-badge done-badge">Concluído</div>` 
+                                              : `<div class="day-badge">${doneEx}/${totalEx} EXERCÍCIOS</div>`}
+                            </div>
+                            <div class="progress-wrap">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${pct}%"></div>
+                                </div>
+                                <div class="progress-text">${pct}%</div>
+                            </div>
+                        </div>
+                `;
+
+                day.muscles.forEach(muscle => {
+                    html += `
+                        <div class="muscle-group">
+                            <div class="muscle-label">${muscle.name}</div>
+                    `;
+
+                    muscle.exercises.forEach(ex => {
+                        const isChecked = dayProg.exercises[ex.id];
+                        html += `
+                            <div class="exercise-item ${isChecked || isCompleted ? 'checked' : ''}" onclick="app.toggleExercise('${day.id}', '${ex.id}')">
+                                <div class="exercise-emoji">${ex.emoji}</div>
+                                <div class="exercise-info">
+                                    <div class="exercise-name">${ex.name}</div>
+                                    <div class="exercise-tip">${ex.tip}</div>
+                                </div>
+                                <div class="exercise-sets">${ex.sets}</div>
+                                <div class="custom-check">
+                                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `</div>`; // fecha muscle-group
+                });
+
+                html += `
+                        <div class="day-footer">
+                `;
+
+                if (isCompleted) {
+                    html += `
+                            <button class="conclude-btn done-btn" disabled>Treino Finalizado ✅</button>
+                            <button class="undo-btn" onclick="app.undoDay('${day.id}')">Desfazer e reabrir treino</button>
+                    `;
+                } else {
+                    html += `
+                            <button class="conclude-btn" onclick="app.markDayCompleted('${day.id}')" ${doneEx === 0 && totalEx > 0 ? '' : ''}>
+                                ${doneEx === totalEx ? 'Finalizar Treino!' : 'Concluir Todos Restantes e Fechar'}
+                            </button>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = html;
+            }
+        }
+
+        // Inicia a aplicação
+        const app = new App();
+    </script>
+</body>
+</html>
