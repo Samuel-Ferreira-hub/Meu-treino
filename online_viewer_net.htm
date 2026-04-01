@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Treino do XD</title>
+  <style>
+    :root[data-theme="dark"] {
+      --bg: #0f0f0f;
+      --card: #1a1a1a;
+      --card2: #222;
+      --text: #f0f0f0;
+      --muted: #888;
+      --accent: #7c3aed;
+      --accent2: #a78bfa;
+      --done-bg: #14532d22;
+      --done-border: #22c55e44;
+      --done-text: #86efac;
+      --bar-bg: #2a2a2a;
+      --border: #2a2a2a;
+      --btn: #7c3aed;
+      --btn-hover: #6d28d9;
+      --badge: #1e1e2e;
+    }
+    :root[data-theme="light"] {
+      --bg: #f5f5f5;
+      --card: #ffffff;
+      --card2: #f0f0f0;
+      --text: #111;
+      --muted: #666;
+      --accent: #7c3aed;
+      --accent2: #6d28d9;
+      --done-bg: #f0fdf4;
+      --done-border: #86efac;
+      --done-text: #15803d;
+      --bar-bg: #e5e7eb;
+      --border: #e5e7eb;
+      --btn: #7c3aed;
+      --btn-hover: #6d28d9;
+      --badge: #ede9fe;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .header-left h1 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .header-left p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-btn, .global-reset {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .theme-btn:hover { background: var(--border); }
+
+    .global-reset {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .global-reset:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      padding: 16px 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav::-webkit-scrollbar { display: none; }
+
+    nav a {
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      background: var(--card2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    nav a:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    nav a.done-nav {
+      background: var(--done-bg);
+      border-color: var(--done-border);
+      color: var(--done-text);
+    }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .day-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .day-card.completed { border-color: #22c55e66; }
+
+    .day-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .day-header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .day-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 4px;
+    }
+
+    .day-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .day-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .day-badge {
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: var(--badge);
+      color: var(--accent2);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .day-badge.done-badge {
+      background: var(--done-bg);
+      color: var(--done-text);
+      border: 1px solid var(--done-border);
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--bar-bg);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.4s ease;
+    }
+
+    .progress-text {
+      font-size: 0.72rem;
+      color: var(--muted);
+      min-width: 36px;
+      text-align: right;
+    }
+
+    .muscle-group { padding: 0 24px; }
+
+    .muscle-label {
+      padding: 14px 0 8px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exercise-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .exercise-item:last-child { border-bottom: none; }
+
+    .exercise-item:hover { opacity: 0.85; }
+
+    .exercise-item.checked {
+      background: var(--done-bg);
+      margin: 2px -8px;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .exercise-item.checked .exercise-name {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .exercise-item.checked .exercise-sets {
+      color: var(--done-text);
+    }
+
+    .custom-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      background: transparent;
+    }
+
+    .exercise-item.checked .custom-check {
+      background: #22c55e;
+      border-color: #22c55e;
+    }
+
+    .check-svg { display: none; width: 12px; height: 12px; }
+    .exercise-item.checked .check-svg { display: block; }
+
+    .exercise-emoji {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      width: 28px;
+      text-align: center;
+    }
+
+    .exercise-info { flex: 1; min-width: 0; }
+
+    .exercise-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .exercise-tip {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .exercise-sets {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent2);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .day-footer {
+      padding: 16px 24px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .conclude-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: none;
+      background: var(--btn);
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .conclude-btn:hover:not(:disabled) {
+      background: var(--btn-hover);
+      transform: translateY(-1px);
+    }
+
+    .conclude-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .conclude-btn.done-btn {
+      background: #15803d;
+    }
+
+    .conclude-btn.done-btn:hover {
+      background: #15803d;
+      transform: none;
+    }
+
+    .undo-btn {
+      display: block;
+      margin: 8px auto 0;
+      background: transparent;
+      border: none;
+      font-size: 0.72rem;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+
+    .undo-btn:hover { color: #ef4444; }
+    .undo-btn.hidden { display: none; }
+
+    .rest-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .rest-card .emoji { font-size: 2.5rem; margin-bottom: 12px; }
+
+    .rest-card h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .rest-card p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      max-width: 320px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .back-top {
+      display: block;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-decoration: none;
+      padding: 16px;
+    }
+
+    .back-top:hover { color: var(--accent2); }
+
+    @media (max-width: 500px) {
+      header { padding: 12px 16px; }
+      .day-header { padding: 16px 16px 14px; }
+      .muscle-group { padding: 0 16px; }
+      .day-footer { padding: 14px 16px 18px; }
+      .day-title { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>🏋️ Treino do XD</h1>
+    <p>5x por semana · Sábado & Domingo: Descanso</p>
+  </div>
+  <div class="header-right">
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️ Claro</button>
+    <button class="global-reset" onclick="resetAll()">Resetar tudo</button>
+  </div>
+</header>
+
+<nav id="mainNav">
+  <a href="#a" id="nav-a">Segunda · A</a>
+  <a href="#b" id="nav-b">Terça · B</a>
+  <a href="#c" id="nav-c">Quarta · C</a>
+  <a href="#d" id="nav-d">Quinta · D</a>
+  <a href="#e" id="nav-e">Sexta · E</a>
+</nav>
+
+<main>
+
+  <!-- DIA A -->
+  <div class="day-card" id="card-a">
+    <div class="day-header">
+      <div class="day-header-top">
+        <div>
+          <div class="day-label">Treino A</div>
+          <div class="day-title">Segunda-feira</div>
+          <div class="day-subtitle">Peito · Costas · Bíceps · Tríceps</div>
+        </div>
+        <span class="day-badge" id="badge-a">0/8</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="fill-a" style="width:0%"></div></div>
+        <span class="progress-text" id="pct-a">0%</span>
+      </div>
+    </div>
+
+    <div class="muscle-group">
+      <div class="muscle-label">Peito</div>
+      <div class="exercise-item" id="a-1" onclick="toggle('a-1')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🏋️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Supino Reto Barra</div>
+          <div class="exercise-tip">Barra numa bancada plana, desça o peso até o peito</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+      <div class="exercise-item" id="a-2" onclick="toggle('a-2')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">💪</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Supino Inclinado Halteres</div>
+          <div class="exercise-tip">Banco inclinado ~30–45° · halteres nos dois lados</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+
+      <div class="muscle-label">Costas</div>
+      <div class="exercise-item" id="a-3" onclick="toggle('a-3')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🔗</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Puxada Frente Pegada Aberta</div>
+          <div class="exercise-tip">Máquina puxada alta · mãos afastadas, puxe até o queixo</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+      <div class="exercise-item" id="a-4" onclick="toggle('a-4')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🪝</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Remada Baixa Máquina/Cabo</div>
+          <div class="exercise-tip">Cabo baixo sentado · puxe ao abdômen, cotovelos para trás</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+
+      <div class="muscle-label">Bíceps</div>
+      <div class="exercise-item" id="a-5" onclick="toggle('a-5')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">💪</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Rosca Direta Barra</div>
+          <div class="exercise-tip">Em pé · barra com os dois braços, flexiona em direção aos ombros</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+      <div class="exercise-item" id="a-6" onclick="toggle('a-6')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🤲</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Rosca Alternada Halteres</div>
+          <div class="exercise-tip">Um braço de cada vez · gire o pulso ao subir</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+
+      <div class="muscle-label">Tríceps</div>
+      <div class="exercise-item" id="a-7" onclick="toggle('a-7')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🔽</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Tríceps Corda Polia</div>
+          <div class="exercise-tip">Polia alta · empurra a corda para baixo abrindo as pontas</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+      <div class="exercise-item" id="a-8" onclick="toggle('a-8')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🏋️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Tríceps Testa Barra W / Halteres</div>
+          <div class="exercise-tip">Deitado no banco · desce em direção à testa, estende os braços</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+    </div>
+
+    <div class="day-footer">
+      <button class="conclude-btn" id="btn-a" onclick="concludeDay('a')" disabled>Concluir Treino A</button>
+      <button class="undo-btn hidden" id="undo-a" onclick="undoDay('a')">desfazer conclusão</button>
+    </div>
+  </div>
+
+  <!-- DIA B -->
+  <div class="day-card" id="card-b">
+    <div class="day-header">
+      <div class="day-header-top">
+        <div>
+          <div class="day-label">Treino B</div>
+          <div class="day-title">Terça-feira</div>
+          <div class="day-subtitle">Pernas · Panturrilha</div>
+        </div>
+        <span class="day-badge" id="badge-b">0/7</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="fill-b" style="width:0%"></div></div>
+        <span class="progress-text" id="pct-b">0%</span>
+      </div>
+    </div>
+
+    <div class="muscle-group">
+      <div class="muscle-label">Quadríceps</div>
+      <div class="exercise-item" id="b-1" onclick="toggle('b-1')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🦵</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Agachamento Smith / Livre</div>
+          <div class="exercise-tip">Barra nas costas · desça até as coxas ficarem paralelas ao chão</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+      <div class="exercise-item" id="b-2" onclick="toggle('b-2')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🦿</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Leg Press 45°</div>
+          <div class="exercise-tip">Máquina inclinada · pés no meio da plataforma, sem travar joelhos</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+
+      <div class="muscle-label">Posterior de Coxa</div>
+      <div class="exercise-item" id="b-3" onclick="toggle('b-3')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🛏️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Mesa Flexora</div>
+          <div class="exercise-tip">Máquina deitado · flexiona os joelhos puxando os calcanhares</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+      <div class="exercise-item" id="b-4" onclick="toggle('b-4')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🏋️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Stiff Barra / Halteres</div>
+          <div class="exercise-tip">Em pé · incline o tronco com joelhos semi-fletidos</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+
+      <div class="muscle-label">Quadríceps Extra</div>
+      <div class="exercise-item" id="b-5" onclick="toggle('b-5')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🪑</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Cadeira Extensora</div>
+          <div class="exercise-tip">Máquina sentado · estende as pernas, quadríceps em contração total</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+
+      <div class="muscle-label">Panturrilhas</div>
+      <div class="exercise-item" id="b-6" onclick="toggle('b-6')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">👟</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Panturrilha em Pé</div>
+          <div class="exercise-tip">Máquina ou step · sobe na ponta dos pés devagar, desce com controle</div>
+        </div>
+        <div class="exercise-sets">3 × 12–15</div>
+      </div>
+      <div class="exercise-item" id="b-7" onclick="toggle('b-7')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🪑</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Panturrilha Sentado</div>
+          <div class="exercise-tip">Máquina sentado · foca no sóleo (músculo mais fundo)</div>
+        </div>
+        <div class="exercise-sets">2–3 × 12–15</div>
+      </div>
+    </div>
+
+    <div class="day-footer">
+      <button class="conclude-btn" id="btn-b" onclick="concludeDay('b')" disabled>Concluir Treino B</button>
+      <button class="undo-btn hidden" id="undo-b" onclick="undoDay('b')">desfazer conclusão</button>
+    </div>
+  </div>
+
+  <!-- DIA C -->
+  <div class="day-card" id="card-c">
+    <div class="day-header">
+      <div class="day-header-top">
+        <div>
+          <div class="day-label">Treino C</div>
+          <div class="day-title">Quarta-feira</div>
+          <div class="day-subtitle">Ombros · Core · Braços (Leve)</div>
+        </div>
+        <span class="day-badge" id="badge-c">0/8</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="fill-c" style="width:0%"></div></div>
+        <span class="progress-text" id="pct-c">0%</span>
+      </div>
+    </div>
+
+    <div class="muscle-group">
+      <div class="muscle-label">Ombros</div>
+      <div class="exercise-item" id="c-1" onclick="toggle('c-1')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🏋️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Desenvolvimento Halteres Sentado</div>
+          <div class="exercise-tip">Banco com encosto · empurra os halteres para cima da cabeça</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+      <div class="exercise-item" id="c-2" onclick="toggle('c-2')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">↔️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Elevação Lateral</div>
+          <div class="exercise-tip">Em pé · eleva os braços lateralmente até a altura dos ombros</div>
+        </div>
+        <div class="exercise-sets">3 × 12–15</div>
+      </div>
+      <div class="exercise-item" id="c-3" onclick="toggle('c-3')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">⬆️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Elevação Frontal</div>
+          <div class="exercise-tip">Em pé · eleva halter/barra para frente até a linha dos ombros</div>
+        </div>
+        <div class="exercise-sets">2–3 × 10–12</div>
+      </div>
+
+      <div class="muscle-label">Braços (Leve)</div>
+      <div class="exercise-item" id="c-4" onclick="toggle('c-4')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🔨</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Rosca Martelo</div>
+          <div class="exercise-tip">Halteres neutros (polegares para cima) · flexiona os dois braços</div>
+        </div>
+        <div class="exercise-sets">2 × 10–12</div>
+      </div>
+      <div class="exercise-item" id="c-5" onclick="toggle('c-5')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🔽</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Tríceps Testa na Polia</div>
+          <div class="exercise-tip">Polia alta · corda ou barra, desce em direção à testa</div>
+        </div>
+        <div class="exercise-sets">2 × 10–12</div>
+      </div>
+
+      <div class="muscle-label">Core</div>
+      <div class="exercise-item" id="c-6" onclick="toggle('c-6')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🧱</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Prancha</div>
+          <div class="exercise-tip">Apoio nos antebraços e pontas dos pés · corpo reto</div>
+        </div>
+        <div class="exercise-sets">3 × 20–30s</div>
+      </div>
+      <div class="exercise-item" id="c-7" onclick="toggle('c-7')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🦵</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Elevação de Pernas</div>
+          <div class="exercise-tip">Deitado · pernas juntas, eleva até 90° sem balançar</div>
+        </div>
+        <div class="exercise-sets">3 × 10–15</div>
+      </div>
+      <div class="exercise-item" id="c-8" onclick="toggle('c-8')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">⬆️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Abdominal Crunch</div>
+          <div class="exercise-tip">Deitado · eleva só a parte superior do tronco, foca na contração</div>
+        </div>
+        <div class="exercise-sets">3 × 15–20</div>
+      </div>
+    </div>
+
+    <div class="day-footer">
+      <button class="conclude-btn" id="btn-c" onclick="concludeDay('c')" disabled>Concluir Treino C</button>
+      <button class="undo-btn hidden" id="undo-c" onclick="undoDay('c')">desfazer conclusão</button>
+    </div>
+  </div>
+
+  <!-- DIA D -->
+  <div class="day-card" id="card-d">
+    <div class="day-header">
+      <div class="day-header-top">
+        <div>
+          <div class="day-label">Treino D</div>
+          <div class="day-title">Quinta-feira</div>
+          <div class="day-subtitle">Peito · Costas</div>
+        </div>
+        <span class="day-badge" id="badge-d">0/6</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="fill-d" style="width:0%"></div></div>
+        <span class="progress-text" id="pct-d">0%</span>
+      </div>
+    </div>
+
+    <div class="muscle-group">
+      <div class="muscle-label">Peito</div>
+      <div class="exercise-item" id="d-1" onclick="toggle('d-1')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🏋️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Supino Reto Barra</div>
+          <div class="exercise-tip">Mais pesado que segunda · foco em força, 4 séries</div>
+        </div>
+        <div class="exercise-sets">4 × 6–8</div>
+      </div>
+      <div class="exercise-item" id="d-2" onclick="toggle('d-2')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🤖</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Supino Inclinado Máquina / Smith</div>
+          <div class="exercise-tip">Banco inclinado com smith ou máquina · movimento guiado</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+      <div class="exercise-item" id="d-3" onclick="toggle('d-3')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🦅</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Crucifixo Halteres Banco Reto</div>
+          <div class="exercise-tip">Banco plano · abre os braços em arco, sente o alongamento do peito</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+
+      <div class="muscle-label">Costas</div>
+      <div class="exercise-item" id="d-4" onclick="toggle('d-4')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🔗</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Puxada Frente Pegada Neutra / Fechada</div>
+          <div class="exercise-tip">Triângulo ou pegada próxima · maior amplitude de movimento</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+      <div class="exercise-item" id="d-5" onclick="toggle('d-5')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🏋️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Remada Curvada Barra / Halteres</div>
+          <div class="exercise-tip">Tronco inclinado ~45° · puxe ao abdômen, cotovelos para trás</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+      <div class="exercise-item" id="d-6" onclick="toggle('d-6')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🌊</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Pulldown / Pullover Máquina / Cabo</div>
+          <div class="exercise-tip">Polia alta · puxa com braços estendidos, ativa o grande dorsal</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+    </div>
+
+    <div class="day-footer">
+      <button class="conclude-btn" id="btn-d" onclick="concludeDay('d')" disabled>Concluir Treino D</button>
+      <button class="undo-btn hidden" id="undo-d" onclick="undoDay('d')">desfazer conclusão</button>
+    </div>
+  </div>
+
+  <!-- DIA E -->
+  <div class="day-card" id="card-e">
+    <div class="day-header">
+      <div class="day-header-top">
+        <div>
+          <div class="day-label">Treino E</div>
+          <div class="day-title">Sexta-feira</div>
+          <div class="day-subtitle">Pernas · Core</div>
+        </div>
+        <span class="day-badge" id="badge-e">0/7</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="fill-e" style="width:0%"></div></div>
+        <span class="progress-text" id="pct-e">0%</span>
+      </div>
+    </div>
+
+    <div class="muscle-group">
+      <div class="muscle-label">Pernas</div>
+      <div class="exercise-item" id="e-1" onclick="toggle('e-1')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🦵</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Agachamento Smith / Livre</div>
+          <div class="exercise-tip">Postura ereta · joelhos alinhados com os pés</div>
+        </div>
+        <div class="exercise-sets">3 × 8–10</div>
+      </div>
+      <div class="exercise-item" id="e-2" onclick="toggle('e-2')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🪑</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Cadeira Extensora</div>
+          <div class="exercise-tip">Máquina sentado · estende as pernas, quadríceps em contração</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+      <div class="exercise-item" id="e-3" onclick="toggle('e-3')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🛏️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Cadeira Flexora</div>
+          <div class="exercise-tip">Máquina sentado ou deitado · flexiona os joelhos puxando os calcanhares</div>
+        </div>
+        <div class="exercise-sets">3 × 10–12</div>
+      </div>
+      <div class="exercise-item" id="e-4" onclick="toggle('e-4')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🚶</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Avanço (Lunge) Halteres / Barra</div>
+          <div class="exercise-tip">Um passo à frente · joelho traseiro quase no chão</div>
+        </div>
+        <div class="exercise-sets">2–3 × 10–12/perna</div>
+      </div>
+
+      <div class="muscle-label">Panturrilha</div>
+      <div class="exercise-item" id="e-5" onclick="toggle('e-5')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">🦿</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Panturrilha no Leg Press</div>
+          <div class="exercise-tip">Leg press · pés na borda inferior da plataforma, empurra na ponta</div>
+        </div>
+        <div class="exercise-sets">3 × 12–15</div>
+      </div>
+
+      <div class="muscle-label">Core</div>
+      <div class="exercise-item" id="e-6" onclick="toggle('e-6')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">↙️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Prancha Lateral (cada lado)</div>
+          <div class="exercise-tip">Apoio lateral no antebraço · corpo alinhado, segura o tempo</div>
+        </div>
+        <div class="exercise-sets">2–3 × 20–30s</div>
+      </div>
+      <div class="exercise-item" id="e-7" onclick="toggle('e-7')">
+        <div class="custom-check"><svg class="check-svg" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="exercise-emoji">⬇️</div>
+        <div class="exercise-info">
+          <div class="exercise-name">Abdominal Infra Banco / Prancha</div>
+          <div class="exercise-tip">Eleva o quadril ou traz os joelhos ao peito · foca no abdômen inferior</div>
+        </div>
+        <div class="exercise-sets">3 × 12–15</div>
+      </div>
+    </div>
+
+    <div class="day-footer">
+      <button class="conclude-btn" id="btn-e" onclick="concludeDay('e')" disabled>Concluir Treino E</button>
+      <button class="undo-btn hidden" id="undo-e" onclick="undoDay('e')">desfazer conclusão</button>
+    </div>
+  </div>
+
+  <!-- DESCANSO -->
+  <div class="rest-card">
+    <div class="emoji">😴</div>
+    <h2>Sábado & Domingo — Descanso Total</h2>
+    <p>Recuperação é parte do treino. Durma bem, hidrate-se e descanse!</p>
+  </div>
+
+  <a href="#" class="back-top">↑ voltar ao topo</a>
+
+</main>
+
+<script>
+  // Mapeamento: dia -> total de exercícios
+  const dayConfig = {
+    a: ['a-1','a-2','a-3','a-4','a-5','a-6','a-7','a-8'],
+    b: ['b-1','b-2','b-3','b-4','b-5','b-6','b-7'],
+    c: ['c-1','c-2','c-3','c-4','c-5','c-6','c-7','c-8'],
+    d: ['d-1','d-2','d-3','d-4','d-5','d-6'],
+    e: ['e-1','e-2','e-3','e-4','e-5','e-6','e-7']
+  };
+
+  function getState() {
+    return JSON.parse(localStorage.getItem('treino_xd') || '{}');
+  }
+
+  function saveState(state) {
+    localStorage.setItem('treino_xd', JSON.stringify(state));
+  }
+
+  function toggle(id) {
+    const day = id.split('-')[0];
+    const state = getState();
+    if (state['done_' + day]) return; // treino já concluído, não deixa alterar
+
+    if (!state.checks) state.checks = {};
+    state.checks[id] = !state.checks[id];
+    saveState(state);
+    renderAll();
+  }
+
+  function concludeDay(day) {
+    const state = getState();
+    state['done_' + day] = true;
+    saveState(state);
+    renderAll();
+  }
+
+  function undoDay(day) {
+    const state = getState();
+    delete state['done_' + day];
+    saveState(state);
+    renderAll();
+  }
+
+  function renderAll() {
+    const state = getState();
+    const checks = state.checks || {};
+
+    Object.keys(dayConfig).forEach(day => {
+      const ids = dayConfig[day];
+      const total = ids.length;
+      const done = ids.filter(id => checks[id]).length;
+      const isDayDone = !!state['done_' + day];
+      const pct = Math.round((done / total) * 100);
+
+      // Exercícios
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (checks[id]) {
+            el.classList.add('checked');
+          } else {
+            el.classList.remove('checked');
+          }
+        }
+      });
+
+      // Progress bar
+      document.getElementById('fill-' + day).style.width = pct + '%';
+      document.getElementById('pct-' + day).textContent = pct + '%';
+
+      // Badge
+      const badge = document.getElementById('badge-' + day);
+      if (isDayDone) {
+        badge.textContent = '✅ Concluído';
+        badge.className = 'day-badge done-badge';
+      } else {
+        badge.textContent = done + '/' + total;
+        badge.className = 'day-badge';
+      }
+
+      // Card border
+      const card = document.getElementById('card-' + day);
+      if (isDayDone) {
+        card.classList.add('completed');
+      } else {
+        card.classList.remove('completed');
+      }
+
+      // Botão concluir
+      const btn = document.getElementById('btn-' + day);
+      if (isDayDone) {
+        btn.textContent = '✅ Treino ' + day.toUpperCase() + ' Concluído!';
+        btn.className = 'conclude-btn done-btn';
+        btn.disabled = true;
+      } else {
+        btn.textContent = 'Concluir Treino ' + day.toUpperCase();
+        btn.className = 'conclude-btn';
+        btn.disabled = done < total;
+      }
+
+      // Undo btn
+      const undo = document.getElementById('undo-' + day);
+      if (isDayDone) {
+        undo.classList.remove('hidden');
+      } else {
+        undo.classList.add('hidden');
+      }
+
+      // Nav link
+      const navLink = document.getElementById('nav-' + day);
+      if (isDayDone) {
+        navLink.classList.add('done-nav');
+      } else {
+        navLink.classList.remove('done-nav');
+      }
+    });
+  }
+
+  function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️ Claro' : '🌙 Escuro';
+    localStorage.setItem('treino_theme', next);
+  }
+
+  function resetAll() {
+    if (confirm('Resetar todo o progresso? Isso apaga todos os checks e conclusões.')) {
+      localStorage.removeItem('treino_xd');
+      renderAll();
+    }
+  }
+
+  // Init
+  (function init() {
+    const theme = localStorage.getItem('treino_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('themeBtn').textContent = theme === 'dark' ? '☀️ Claro' : '🌙 Escuro';
+    renderAll();
+  })();
+</script>
+
+</body>
+</html>
