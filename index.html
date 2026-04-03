@@ -465,9 +465,255 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        /* ===== CHECK-IN BUTTON ===== */
+        .checkin-btn {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            border: none;
+            border-radius: 10px;
+            padding: 7px 14px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(124,58,237,0.35);
+        }
+        .checkin-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(124,58,237,0.5);
+        }
+        .checkin-btn .checkin-count {
+            background: rgba(255,255,255,0.25);
+            border-radius: 999px;
+            padding: 1px 7px;
+            font-size: 0.72rem;
+        }
+
+        /* ===== CHECK-IN MODAL ===== */
+        .checkin-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        .checkin-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .checkin-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-height: 85vh;
+            background: var(--card);
+            border-radius: 24px 24px 0 0;
+            border-top: 1px solid var(--border);
+            z-index: 501;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .checkin-panel.open {
+            transform: translateY(0);
+        }
+        .checkin-drag {
+            width: 40px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 999px;
+            margin: 12px auto 0;
+            flex-shrink: 0;
+        }
+        .checkin-header {
+            padding: 16px 24px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .checkin-header h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+        .checkin-close {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        .checkin-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 16px 24px;
+            flex-shrink: 0;
+        }
+        .stat-box {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+        .stat-box .stat-val {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--accent2);
+            line-height: 1;
+        }
+        .stat-box .stat-lbl {
+            font-size: 0.65rem;
+            color: var(--muted);
+            margin-top: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-box.streak-box .stat-val {
+            color: #f59e0b;
+        }
+        .checkin-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 24px 24px;
+        }
+        .checkin-body::-webkit-scrollbar { width: 4px; }
+        .checkin-body::-webkit-scrollbar-track { background: transparent; }
+        .checkin-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        .week-group-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin: 16px 0 8px;
+        }
+        .checkin-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .checkin-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #7c3aed22, #a78bfa33);
+            border: 1.5px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .checkin-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .checkin-date {
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+        .checkin-day-label {
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-top: 1px;
+        }
+        .checkin-time {
+            font-size: 0.72rem;
+            color: var(--accent2);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .checkin-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+        }
+        .checkin-empty .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        .checkin-empty p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .do-checkin-btn {
+            width: calc(100% - 48px);
+            margin: 0 24px 20px;
+            padding: 13px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 16px rgba(124,58,237,0.4);
+            flex-shrink: 0;
+        }
+        .do-checkin-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(124,58,237,0.55);
+        }
+        .do-checkin-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .already-checked {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--done-text);
+            margin: 0 24px 16px;
+            padding: 8px;
+            background: var(--done-bg);
+            border: 1px solid var(--done-border);
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
         @media (min-width: 600px) {
             .day-header-top {
                 align-items: center;
+            }
+            .checkin-panel {
+                max-width: 480px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100%);
+                border-radius: 24px 24px 0 0;
+            }
+            .checkin-panel.open {
+                transform: translateX(-50%) translateY(0);
+            }
+            .do-checkin-btn {
+                width: calc(100% - 48px);
             }
         }
     </style>
@@ -480,10 +726,27 @@
             <p>Acompanhe sua evolução diária</p>
         </div>
         <div class="header-right">
+            <button id="checkinBtn" class="checkin-btn" onclick="app.openCheckin()" title="Histórico de Check-ins">
+                🏟️ Check-in <span class="checkin-count" id="checkinCount">0</span>
+            </button>
             <button class="global-reset" onclick="app.resetData()" title="Zerar progresso da semana">Zerar</button>
             <button class="theme-btn" id="themeBtn" onclick="app.toggleTheme()" title="Trocar Tema">🌙</button>
         </div>
     </header>
+
+    <!-- CHECK-IN OVERLAY & PANEL -->
+    <div class="checkin-overlay" id="checkinOverlay" onclick="app.closeCheckin()"></div>
+    <div class="checkin-panel" id="checkinPanel">
+        <div class="checkin-drag"></div>
+        <div class="checkin-header">
+            <h2>🏟️ Histórico na Academia</h2>
+            <button class="checkin-close" onclick="app.closeCheckin()">✕ Fechar</button>
+        </div>
+        <div class="checkin-stats" id="checkinStats"></div>
+        <div id="alreadyCheckedMsg" class="already-checked" style="display:none">✅ Você já fez check-in hoje!</div>
+        <button class="do-checkin-btn" id="doCheckinBtn" onclick="app.doCheckin()">📍 Fazer Check-in Agora</button>
+        <div class="checkin-body" id="checkinHistory"></div>
+    </div>
 
     <nav id="nav-container">
         <!-- Renderizado via JS -->
@@ -604,6 +867,7 @@
                 this.data = workoutData;
                 this.currentDayIndex = 0;
                 this.progress = this.loadProgress();
+                this.checkins = this.loadCheckins();
                 
                 this.init();
             }
@@ -612,6 +876,7 @@
                 this.applySavedTheme();
                 this.renderNav();
                 this.renderCurrentDay();
+                this.updateCheckinCount();
             }
 
             loadProgress() {
@@ -853,6 +1118,185 @@
                 `;
 
                 container.innerHTML = html;
+            }
+
+            // ===== CHECK-IN METHODS =====
+
+            loadCheckins() {
+                const saved = localStorage.getItem('treino_xd_checkins');
+                if (saved) {
+                    try { return JSON.parse(saved); } catch(e) { return []; }
+                }
+                return [];
+            }
+
+            saveCheckins() {
+                localStorage.setItem('treino_xd_checkins', JSON.stringify(this.checkins));
+            }
+
+            todayKey() {
+                const d = new Date();
+                return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            }
+
+            alreadyCheckedToday() {
+                return this.checkins.some(c => c.dateKey === this.todayKey());
+            }
+
+            doCheckin() {
+                if (this.alreadyCheckedToday()) {
+                    this.showToast('Você já fez check-in hoje! 💪');
+                    return;
+                }
+                const now = new Date();
+                const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+                const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+                // Descobre qual treino está ativo (se houver)
+                const activeDay = this.data[this.currentDayIndex];
+                const trainLabel = activeDay && !activeDay.rest ? `${activeDay.label} – ${activeDay.title}` : 'Dia de descanso';
+
+                const entry = {
+                    dateKey: this.todayKey(),
+                    dateStr: `${String(now.getDate()).padStart(2,'0')} ${months[now.getMonth()]} ${now.getFullYear()}`,
+                    weekday: days[now.getDay()],
+                    time: `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`,
+                    train: trainLabel
+                };
+
+                this.checkins.unshift(entry);
+                this.saveCheckins();
+                this.updateCheckinCount();
+                this.renderCheckinPanel();
+                this.showToast('Check-in feito! Hora de suar 🔥');
+            }
+
+            calcStreak() {
+                if (this.checkins.length === 0) return 0;
+                // Ordena por dateKey descendente
+                const sorted = [...this.checkins].sort((a,b) => b.dateKey.localeCompare(a.dateKey));
+                let streak = 0;
+                const today = new Date();
+                today.setHours(0,0,0,0);
+
+                for (let i = 0; i < sorted.length; i++) {
+                    const [y,m,d] = sorted[i].dateKey.split('-').map(Number);
+                    const entryDate = new Date(y, m-1, d);
+                    const diffDays = Math.round((today - entryDate) / (1000*60*60*24));
+                    if (diffDays === i) { streak++; } else { break; }
+                }
+                return streak;
+            }
+
+            calcThisWeek() {
+                const today = new Date();
+                const startOfWeek = new Date(today);
+                startOfWeek.setDate(today.getDate() - today.getDay());
+                startOfWeek.setHours(0,0,0,0);
+                return this.checkins.filter(c => {
+                    const [y,m,d] = c.dateKey.split('-').map(Number);
+                    return new Date(y, m-1, d) >= startOfWeek;
+                }).length;
+            }
+
+            updateCheckinCount() {
+                document.getElementById('checkinCount').textContent = this.checkins.length;
+            }
+
+            openCheckin() {
+                this.renderCheckinPanel();
+                document.getElementById('checkinOverlay').classList.add('open');
+                document.getElementById('checkinPanel').classList.add('open');
+            }
+
+            closeCheckin() {
+                document.getElementById('checkinOverlay').classList.remove('open');
+                document.getElementById('checkinPanel').classList.remove('open');
+            }
+
+            renderCheckinPanel() {
+                // Stats
+                const statsEl = document.getElementById('checkinStats');
+                const streak = this.calcStreak();
+                const thisWeek = this.calcThisWeek();
+                const total = this.checkins.length;
+                statsEl.innerHTML = `
+                    <div class="stat-box streak-box">
+                        <div class="stat-val">${streak}</div>
+                        <div class="stat-lbl">🔥 Streak</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-val">${thisWeek}</div>
+                        <div class="stat-lbl">Esta semana</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-val">${total}</div>
+                        <div class="stat-lbl">Total geral</div>
+                    </div>
+                `;
+
+                // Check-in button state
+                const alreadyBtn = document.getElementById('alreadyCheckedMsg');
+                const doBtn = document.getElementById('doCheckinBtn');
+                if (this.alreadyCheckedToday()) {
+                    alreadyBtn.style.display = 'block';
+                    doBtn.disabled = true;
+                    doBtn.textContent = '✅ Check-in já feito hoje!';
+                } else {
+                    alreadyBtn.style.display = 'none';
+                    doBtn.disabled = false;
+                    doBtn.textContent = '📍 Fazer Check-in Agora';
+                }
+
+                // History list
+                const histEl = document.getElementById('checkinHistory');
+                if (this.checkins.length === 0) {
+                    histEl.innerHTML = `
+                        <div class="checkin-empty">
+                            <div class="empty-icon">📭</div>
+                            <p>Nenhum check-in ainda.<br>Clique no botão acima quando chegar na academia!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Agrupar por semana
+                const groups = {};
+                this.checkins.forEach(c => {
+                    const [y,m,d] = c.dateKey.split('-').map(Number);
+                    const date = new Date(y, m-1, d);
+                    const startOfWeek = new Date(date);
+                    startOfWeek.setDate(date.getDate() - date.getDay());
+                    const weekKey = `${startOfWeek.getFullYear()}-${String(startOfWeek.getMonth()+1).padStart(2,'0')}-${String(startOfWeek.getDate()).padStart(2,'0')}`;
+                    if (!groups[weekKey]) groups[weekKey] = [];
+                    groups[weekKey].push(c);
+                });
+
+                const emojis = ['💪','🔥','⚡','🏋️','🎯','🚀','👊'];
+                let html = '';
+                Object.keys(groups).sort((a,b) => b.localeCompare(a)).forEach(weekKey => {
+                    const weekCheckins = groups[weekKey];
+                    const [wy, wm, wd] = weekKey.split('-').map(Number);
+                    const weekStart = new Date(wy, wm-1, wd);
+                    const weekEnd = new Date(weekStart);
+                    weekEnd.setDate(weekStart.getDate() + 6);
+                    const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+                    const label = `Semana de ${wd} ${months[wm-1]} (${weekCheckins.length} ${weekCheckins.length === 1 ? 'ida' : 'idas'})`;
+                    html += `<div class="week-group-label">${label}</div>`;
+                    weekCheckins.forEach((c, i) => {
+                        const emoji = emojis[i % emojis.length];
+                        html += `
+                            <div class="checkin-item">
+                                <div class="checkin-dot">${emoji}</div>
+                                <div class="checkin-info">
+                                    <div class="checkin-date">${c.weekday}, ${c.dateStr}</div>
+                                    <div class="checkin-day-label">${c.train}</div>
+                                </div>
+                                <div class="checkin-time">${c.time}</div>
+                            </div>
+                        `;
+                    });
+                });
+                histEl.innerHTML = html;
             }
         }
 
